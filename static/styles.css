@@ -1,0 +1,72 @@
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 90% !important;
+        padding: 10px;
+    }
+
+    input, select, button {
+        width: 100% !important;
+        margin: 5px 0;
+    }
+
+    nav, footer {
+        font-size: 14px;
+    }
+}
+
+
+
+body {
+  background-image: url('../static/bg.jpg'); /* Add your own background image */
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
+
+footer {
+  background-color: rgba(114, 3, 157, 0.95);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.container {
+    background: rgba(0,0,0,0.7);
+    padding: 30px;
+    max-width: 500px;
+    margin: 50px auto;
+    border-radius: 10px;
+    text-align: center;
+}
+
+input, select {
+    padding: 10px;
+    margin: 10px;
+    width: 90%;
+}
+
+button {
+    padding: 10px 20px;
+    background: #0984e3;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.result {
+    margin-top: 20px;
+    background: #dff9fb;
+    padding: 15px;
+    border-radius: 5px;
+}
