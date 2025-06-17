@@ -1,14 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BMI Result</title>
+    <meta charset="utf-8">
+    <title>BMI Report</title>
+    <style>
+        .btn-home {
+    border-radius: 8px;
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+         html, body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            
+        }
+        body {
+            background-image: url("{{ url_for('static', filename='12721033.webp') }}");
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-repeat: no-repeat;   
+            height: 100%;
+        }
+        .intro-text {
+            font-size: 1.2rem;
+            color: #444444;
+            margin-bottom: 30px;
+        }
+
+       .btn-primary {
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    border-radius: 8px;
+    background-color: black;
+    border: none;
+}
+        .btn-primary:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .report-container {
+            max-width: 500px;
+            margin: 60px auto;
+            background: #fff;
+            border: 3px solid #3498db;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(52,152,219,0.10);
+            padding: 48px 36px 40px 36px;
+            text-align: center;
+        }
+        .report-title {
+            font-size: 2.7rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 32px;
+            letter-spacing: 2px;
+        }
+        .report-label {
+            font-size: 1.4rem;
+            color: #222;
+            font-weight: 600;
+        }
+        .report-value {
+            font-size: 1.7rem;
+            color: #2c3e50;
+            margin-bottom: 22px;
+            font-weight: 500;
+        }
+        @media (max-width: 576px) {
+            .main-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Hello, {{ name }}!</h2>
-    <p>Your BMI is: <strong>{{ bmi }}</strong></p>
-    <p>BMI Class: <strong>{{ bmi_class }}</strong></p>
-    <p>Health Tip: {{ tip }}</p>
-    <br>
-    <a href="/">🔁 Calculate Again</a>
+    
+    <div class="report-container">
+        <div class="report-title">BMIC</div>
+        <div class="report-label">Name:</div>
+        <div class="report-value">{{ name }}</div>
+        <div class="report-label">BMI:</div>
+        <div class="report-value">{{ bmi }}</div>
+        <div class="report-label">Category:</div>
+        <div class="report-value">{{ bmi_class }}</div>
+     <form action="/download_pdf" method="POST">
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="gender" value="{{ gender }}">
+    <input type="hidden" name="age" value="{{ age }}">
+    <input type="hidden" name="height" value="{{ height }}">
+    <input type="hidden" name="weight" value="{{ weight }}">
+    <input type="hidden" name="bmi" value="{{ bmi }}">
+    <input type="hidden" name="bmi_class" value="{{ bmi_class }}">
+    <input type="hidden" name="tip" value="{{ tip }}">
+
+    <button type="submit">📄 Download PDF Report</button>
+</form>
+        <div class="intro-text">
+            <p>Thank you for using our BMI Calculator. Your health is important to us!</p>
+        </div>
+         <a href="{{ url_for('predict') }}" class="btn-home">🏠 Predict Again</a>
+    </div>
+   
 </body>
-</html>
