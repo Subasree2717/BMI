@@ -4,6 +4,8 @@ import numpy as np
 from flask import make_response
 from xhtml2pdf import pisa
 from io import BytesIO
+from datetime import datetime
+from flask import jsonify
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # Needed for session management
@@ -25,28 +27,44 @@ bmi_tips = {
 }
 
 
-@app.route('/bmi_chart')
-def bmi_chart():
-    from collections import Counter
-    classes = [rec['bmi_class'] for rec in bmi_results]
-    counter = dict(Counter(classes))
-    return {"labels": list(counter.keys()), "values": list(counter.values())}
 
 
 @app.route('/download_pdf', methods=['POST'])
 def download_pdf():
     name = request.form['name']
+    gender = request.form['gender']
+    age = request.form['age']
+    height = request.form['height']
+    weight = request.form['weight']
     bmi = request.form['bmi']
     bmi_class = request.form['bmi_class']
+    tip = request.form['tip']
 
-    html = render_template('pdf.html', name=name, bmi=bmi, bmi_class=bmi_class)
+    # Auto-generate today's date
+    date_today = datetime.today().strftime("%d-%m-%Y")
+
+    # Render the HTML with all values
+    html = render_template('pdf.html',
+                           name=name,
+                           gender=gender,
+                           age=age,
+                           height=height,
+                           weight=weight,
+                           bmi=bmi,
+                           bmi_class=bmi_class,
+                           tip=tip,
+                           date=date_today)
+
+    # Generate PDF
     result = BytesIO()
     pisa_status = pisa.CreatePDF(html, dest=result)
 
+    # Return PDF file as response
     response = make_response(result.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=bmi_report.pdf'
     return response
+
 
 
 @app.route('/')
