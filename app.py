@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
 import joblib
 import numpy as np
 from flask import make_response
@@ -6,6 +6,7 @@ from xhtml2pdf import pisa
 from io import BytesIO
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here'  # Needed for session management
 
 bmi_results = []
 
@@ -32,7 +33,6 @@ def bmi_chart():
     return {"labels": list(counter.keys()), "values": list(counter.values())}
 
 
-
 @app.route('/download_pdf', methods=['POST'])
 def download_pdf():
     name = request.form['name']
@@ -47,6 +47,7 @@ def download_pdf():
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=bmi_report.pdf'
     return response
+
 
 @app.route('/')
 def home():
@@ -67,17 +68,30 @@ def predict():
         prediction = model.predict(X_scaled)
         bmi_class = label_encoder.inverse_transform(prediction)[0]
         tip = bmi_tips.get(bmi_class, "Stay healthy!")
-        
+
         bmi_results.append({'name': name, 'bmi_class': bmi_class})
 
-        return render_template('index.html', bmi=round(bmi, 2), bmi_class=bmi_class, name=name, tip=tip)
-
-        return render_template('index.html', bmi=round(bmi, 2), bmi_class=bmi_class, name=name, tip=tip)
+        # Store result in session and redirect
+        session['result'] = {
+            'name': name,
+            'bmi': round(bmi, 2),
+            'bmi_class': bmi_class,
+            'tip': tip
+        }
+        return redirect(url_for('result'))
 
     return render_template('index.html')
+
+
+@app.route('/result')
+def result():
+    result = session.get('result')
+    if not result:
+        return redirect(url_for('home'))
+    return render_template('result.html', **result)
+
 
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-
