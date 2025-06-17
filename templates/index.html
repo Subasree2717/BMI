@@ -59,13 +59,7 @@
         box-shadow: 0 6px 20px rgba(0,0,0,0.08);
        
     }
-    #bmiChart {
-        display: block;
-        margin: 40px auto 0 auto;
-        max-width: 400px;
-        width: 100%;
-        height: auto !important;
-    }
+   
 
         h1 {
             text-align: center;
@@ -158,45 +152,11 @@
             <button type="submit">Predict</button>
         </form>
 
-        {% if bmi %}
-            <div class="result mt-4">
-                <h2>Hi {{ name }},</h2>
-                <p><strong>Your BMI:</strong> {{ bmi }}</p>
-                <p><strong>Classification:</strong> {{ bmi_class }}</p>
-                <p><strong>Tip:</strong> {{ tip }}</p>
+        
 
-                <form action="/download_pdf" method="post" class="mt-3">
-                    <input type="hidden" name="name" value="{{ name }}">
-                    <input type="hidden" name="bmi" value="{{ bmi }}">
-                    <input type="hidden" name="bmi_class" value="{{ bmi_class }}">
-                    <button type="submit">Download PDF</button>
-                </form>
-            </div>
-        {% endif %}
-
-        <!-- BMI Chart -->
-        <canvas id="bmiChart" width="400" height="400"></canvas>
     </div>
 
-    <!-- Chart Script -->
-    <script>
-        fetch('/bmi_chart')
-        .then(res => res.json())
-        .then(data => {
-            new Chart(document.getElementById('bmiChart'), {
-                type: 'pie',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: "BMI Distribution",
-                        backgroundColor: ['#3498db','#f1c40f','#e74c3c','#8e44ad','#2ecc71'],
-                        data: data.values
-                    }]
-                }
-            });
-        });
-    </script>
-
+    
     <!-- Footer -->
     <footer>
         <p><b><center>&copy; 2025 BMI Classifier. All rights reserved.</center></b></p>
